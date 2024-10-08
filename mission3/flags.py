@@ -171,7 +171,7 @@ def european_flag(width):
         tortue.forward((2 * (width/3))/2)
         tortue.right(90)
         
-    drawEUStars(width/40, width/4.5)
+    drawEUStars(width/42, width/4.5)
 
 def exemple_mouvement():
     """ Fonction qui imprime des drapeaux dans une variété de positions et rotations. """
