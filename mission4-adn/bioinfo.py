@@ -1,28 +1,28 @@
-def is_adn(s):
-    for i in s:
-        if i not in ["a", "t", "c", "g"] or i not in ["A", "T", "C", "G"]:
+def is_adn(text):
+    for i in text:
+        if i not in ["a", "t", "c", "g", "A", "T", "C", "G"]:
             return False
     return True
 
-def positions(s, p):
+def positions(text, car):
     pos = []
-    for i in range(len(s)):
+    for i in range(len(text)):
         match = True
-        for j in range(len(p)):
-            if s[i + j] != p[j]:
-                print(s[i + j], "is not equal to", p[j])
+        for j in range(len(car)):
+            if text[i + j].lower() != car[j].lower():
+                print(text[i + j], "is not equal to", car[j])
                 match = False
                 break
         if match:
             pos.append(i)
     return pos
 
-def distance_h(s1, s2):
+def distance_h(text1, text2):
     d = 0
-    if len(s1) != len(s2):
+    if len(text1) != len(text2):
         return None
-    for i in range(len(s1)):
-        if s1[i] != s2[i]:
+    for i in range(len(text1)):
+        if text1[i].lower() != text2[i].lower():
             d += 1
     return d
 
