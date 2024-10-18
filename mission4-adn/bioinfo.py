@@ -1,4 +1,6 @@
 def is_adn(text):
+    if i == " ":
+        return False
     for i in text:
         if i not in ["a", "t", "c", "g", "A", "T", "C", "G"]:
             return False
