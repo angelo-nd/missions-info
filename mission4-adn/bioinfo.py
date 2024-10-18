@@ -1,5 +1,5 @@
 def is_adn(text):
-    if i == " ":
+    if not text.strip():
         return False
     for i in text:
         if i not in ["a", "t", "c", "g", "A", "T", "C", "G"]:
@@ -8,7 +8,9 @@ def is_adn(text):
 
 def positions(text, car):
     pos = []
-    for i in range(len(text)):
+    text_len = len(text)
+    car_len = len(car)
+    for i in range(text_len - car_len + 1):
         match = True
         for j in range(len(car)):
             if text[i + j].lower() != car[j].lower():
@@ -32,6 +34,9 @@ def distances_matrices(l):
     for i in l:
         b = []
         for j in l:
-            b.append(distance_h(i, j))
+            try:
+                b.append(distance_h(i, j))
+            except:
+                b.append(None)
         a.append(b)
     return a
