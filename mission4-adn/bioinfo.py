@@ -12,7 +12,6 @@ def positions(text, car):
         match = True
         for j in range(len(car)):
             if text[i + j].lower() != car[j].lower():
-                print(text[i + j], "is not equal to", car[j])
                 match = False
                 break
         if match:
