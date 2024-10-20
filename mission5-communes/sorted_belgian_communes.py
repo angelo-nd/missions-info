@@ -1,5 +1,6 @@
-# list of (most) Belgian communities, with coordinates according to a Mercator projection.
+import math
 
+# list of (most) Belgian communities, with coordinates according to a Mercator projection.
 all_communes = [("Aalst", (575061.8368696974, 5644396.819551783)),("Aalter", (531519.6775850406, 5659184.536941301)),\
     ("Aarschot", (629867.1340910662, 5649141.00455739)),("Aartselaar", (596785.2232017588, 5665558.287847248)),\
     ("Affligem", (578131.916279454, 5639292.55774853)),("Aiseau-Presles", (611605.8849598696, 5585675.111576218)),\
@@ -282,9 +283,172 @@ all_communes = [("Aalst", (575061.8368696974, 5644396.819551783)),("Aalter", (53
     ("Zwijndrecht", (593722.544393318, 5673844.430093279))]
 
 def verify_order(communes):
+    """
+    Vérifie que la liste de communes est bien ordonnée par ordre alphabétique.
+
+    Args:
+        communes (list): Liste des communes.
+
+    Returns:
+        bool: Vrai si la liste est bien ordonnée, faux sinon.
+
+    Examples:
+        Example usage of the function:
+        
+        >>> result = verify_order([("Aalst", (0, 0)),("Aalter", (0, 0)])
+        >>> print(result)
+        True
+    """
     for this_commune in range(len(communes)- 1):
         if communes[this_commune][0] > communes[this_commune + 1][0]:
             return False
     return True
 
-print(verify_order(all_communes))
+def test_verify_order():
+    """
+    Test de la fonction verify_order.
+    """
+    # Test 1: List est bien ordonnée
+    assert verify_order([("Aalst", (0, 0)), ("Aalter", (0, 0)), ("Zaventem", (0, 0))]) == True, "Test 1 Failed"
+
+    # Test 2: List is n'est pas bien ordonnée
+    assert verify_order([("Aalter", (0, 0)), ("Zaventem", (0, 0)), ("Aalst", (0, 0))]) == False, "Test 2 Failed"
+
+    # Test 3: Une liste vide devrait donner True
+    assert verify_order([]) == True, "Test 3 Failed"
+
+    # Test 4: Idem pour une liste avec une seule commune
+    assert verify_order([("Brussels", (0, 0))]) == True, "Test 4 Failed"
+
+    # Test 5: Idem pour une liste avec deux communes identiques
+    assert verify_order([("Gent", (0, 0)), ("Gent", (1, 1))]) == True, "Test 5 Failed"
+
+    print("Tout les tests sont réussis!")
+
+def coordinate(name, list_of_names):
+    """
+    Renvoie les coordonnées de la commune `name` dans la liste `list_of_names`.
+
+    Args:
+        name (str): Nom de la commune.
+        list_on_names (list): Liste de toutes les communes.
+
+    Returns:
+        tuple: Tuple avec les coordonnées de la commune.
+
+    Raises:
+        TypeError: Si `name` n'est pas une chaine de caractères ou si `list_of_names` n'est pas une liste.
+
+    Examples:
+        Example usage of the function:
+        >>> coordinate("Aalst", [("Aalst", (0, 0)), ("Aalter", (1, 0)), ("Zaventem", (0, 1))])
+        (0, 0)
+    """
+    first = 0
+    last = len(list_of_names)-1
+    found = False
+
+    while first<=last and not found:
+        middle = (first + last)//2
+        if list_of_names[middle][0] == name:
+            commune_coordinate = list_of_names[middle][1]
+            found = True
+        else:
+            if name < list_of_names[middle][0]:
+                last = middle-1
+            else:
+                first = middle+1
+
+    return commune_coordinate
+
+def test_coordinate():
+    """
+    Test de la fonction coordinate.
+    """
+    # Test 1: Commune existe dans la liste
+    assert coordinate("Aalst", [("Aalst", (0, 0)), ("Aalter", (1, 0)), ("Zaventem", (0, 1))]) == (0, 0), "Test 1 Failed"
+
+    # Test 2: Commune n'existe pas dans la liste
+    assert coordinate("Bruxelles", [("Aalst", (0, 0)), ("Aalter", (1, 0)), ("Zaventem", (0, 1))]) == None, "Test 2 Failed"
+
+    # Test 3: Commune est la première dans la liste
+    assert coordinate("Zaventem", [("Aalst", (0, 0)), ("Aalter", (1, 0)), ("Zaventem", (0, 1))]) == (0, 1), "Test 3 Failed"
+
+    print("Tout les tests sont réussis!")
+
+def distance(commune1, commune2, all_communes):
+    """
+    Renvoie la distance calculée entre la commune `commune1` et la commune `commune2` dans la liste `all_communes`.
+
+    Args:
+        commune1 (str): Nom de la première commune.
+        commune2 (str): Nom de la deuxième commune.
+        all_communes (list): Liste de toutes les communes.
+
+    Returns:
+        float: Distance entre les deux communes.
+
+    Raises:
+        TypeError: Si `commune1` ou `commune2` n'est pas une chaine de caractères ou si `all_communes` n'est pas une liste.
+
+    Examples:
+        Example usage of the function:
+        >>> distance("Aalst", "Aalter", [("Aalst", (0, 0)), ("Aalter", (1, 0)), ("Zaventem", (0, 1))])
+        1.0
+    """
+    commune1_coord = coordinate(commune1, all_communes)
+    commune2_coord = coordinate(commune2, all_communes)
+    return math.sqrt((commune1_coord[0] - commune2_coord[0])**2 + (commune1_coord[1] - commune2_coord[1])**2)
+
+def test_distance():
+    """
+    Test de la fonction distance.
+    """
+    # Test 1: Communes existent dans la liste
+    assert distance("Aalst", "Aalter", [("Aalst", (0, 0)), ("Aalter", (1, 0)), ("Zaventem", (0, 1))]) == 1.0, "Test 1 Failed"
+
+    # Test 2: Communes n'existent pas dans la liste
+    assert distance("Bruxelles", "Aalter", [("Aalst", (0, 0)), ("Aalter", (1, 0)), ("Zaventem", (0, 1))]) == None, "Test 2 Failed"
+
+    # Test 3: Communes sont la première dans la liste
+    assert distance("Zaventem", "Aalter", [("Aalst", (0, 0)), ("Aalter", (1, 0)), ("Zaventem", (0, 1))]) == 1.0, "Test 3 Failed"
+
+    print("Tout les tests sont réussis!")
+
+def tour_distance(communes, all_communes):
+    """
+    Renvoie la distance totale entre toutes les communes de la liste `communes`.
+    La distance entre les communes sont calculées à partir de la fonction `distance` et de la liste `all_communes`.
+
+    Args:
+        communes (list): Liste des communes.
+        all_communes (list): Liste de toutes les communes.
+
+    Returns:
+        float: Distance totale entre toutes les communes de la liste `communes`.
+
+    Raises:
+        TypeError: Si `communes` n'est pas une liste ou si `all_communes` n'est pas une liste.
+
+    Examples:
+        Example usage of the function:
+        >>> tour_distance([("Aalst", (0, 0)), ("Aalter", (1, 0)), ("Zaventem", (0, 1))], [("Aalst", (0, 0)), ("Aalter", (1, 0)), ("Zaventem", (0, 1))])
+        2.0
+    """
+    distance_totale = 0
+    for this_commune_index in range(len(communes)-1):
+        distance_totale += distance(communes[this_commune_index],communes[this_commune_index + 1], all_communes)
+    distance_totale += distance(communes[len(communes)-1],communes[0], all_communes)
+    return distance_totale
+
+def test_tour_distance():
+    """
+    Test de la fonction tour_distance.
+    """
+    # Test 1: Communes existent dans la liste
+    assert tour_distance(["Aalst", "Aalter", "Zaventem"], [("Aalst", (0, 0)), ("Aalter", (1, 0)), ("Zaventem", (0, 1))]) == 2.0, "Test 1 Failed"
+
+    # Test 2: Communes n'existent pas dans la liste
+    assert tour_distance(["Aalst", "Bruxelles", "Zaventem"], [("Aalst", (0, 0)), ("Aalter", (1, 0)), ("Zaventem", (0, 1))]) == 2.0, "Test 2 Failed"
+
+    print("Tout les tests sont réussis!")
