@@ -1,0 +1,1 @@
+sorted_belgian_communes.py contient plusieurs fonctions utilies pour déterminer les coordonées de divers communes et la distance entre chacune d'elles.
