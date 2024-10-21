@@ -29,7 +29,7 @@ def distance_h(text1, text2):
             d += 1
     return d
 
-def distances_matrices(l):
+def distances_matrice(l):
     a = []
     for i in l:
         b = []
