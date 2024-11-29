@@ -42,8 +42,10 @@ def assistant_file():
     try:
         file = open(arguments, "r")
         print("Fichier", arguments, "ouvert.")
+        return True
     except:
         print("Fichier pas trouvé.")
+        return False
 
 def assistant_info():
     if file == "":
@@ -81,9 +83,11 @@ def assistant_search():
         return
     if binary_search(arguments.split()[0], sorted_wordslist)[0] == True:
         print("Le mot", arguments, "est dans la liste.")
+        return True
     else:
         print("Le mot", arguments, "n'est pas dans la liste.")
-    print(binary_search(arguments, sorted_wordslist))
+        return False
+    # print(binary_search(arguments, sorted_wordslist))
 
 def assistant_sum():
     global arguments
@@ -100,6 +104,7 @@ def assistant_sum():
         else:
             wordssum += int(binary_search_result[1][1])
     print("La somme des mots", arguments, "est", wordssum)
+    return wordssum
         
 def assistant_avg():
     global arguments
