@@ -123,27 +123,28 @@ def assistant_help():
     for command in commandlist:
         print(command)
 
-while True:
-    
-    assistant_command()
-    if command in commandlist:
-        if command == "file":
-            assistant_file()
-        elif command == "info":
-            assistant_info()
-        elif command == "words":
-            assistant_words()
-        elif command == "search":
-            assistant_search()
-        elif command == "sum":
-            assistant_sum()
-        elif command == "avg":
-            assistant_avg()
-        elif command == "help":
-            assistant_help()
-        elif command == "exit":
-            print("Au revoir!")
-            break
-    else:
-        print("ERREUR: Commande inconnue.")
-    time.sleep(1)
+if __name__ == "__main__":
+    while True:
+        
+        assistant_command()
+        if command in commandlist:
+            if command == "file":
+                assistant_file()
+            elif command == "info":
+                assistant_info()
+            elif command == "words":
+                assistant_words()
+            elif command == "search":
+                assistant_search()
+            elif command == "sum":
+                assistant_sum()
+            elif command == "avg":
+                assistant_avg()
+            elif command == "help":
+                assistant_help()
+            elif command == "exit":
+                print("Au revoir!")
+                break
+        else:
+            print("ERREUR: Commande inconnue.")
+        time.sleep(1)
